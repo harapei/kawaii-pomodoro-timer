@@ -23,7 +23,7 @@
 
 ## デモ
 
-[こちらからアプリを試せます](https://your-username.github.io/kawaii-pomodoro-timer/)
+[こちらからアプリを試せます](https://harapei.github.io/kawaii-pomodoro-timer/)
 
 ## 技術
 
