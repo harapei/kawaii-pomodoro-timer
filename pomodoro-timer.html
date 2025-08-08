@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 可愛いポモドーロタイマー 🌸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            padding: 50px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            position: relative;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .kawaii-decoration {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #ff6b9d, #ffc3e6);
+            width: 80px;
+            height: 30px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+            font-size: 2.8em;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.5);
+        }
+
+        .timer-circle {
+            width: 280px;
+            height: 280px;
+            border: 8px solid #ffc3e6;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            background: linear-gradient(135deg, #ffffff 0%, #ffe8f0 100%);
+            box-shadow: 
+                0 10px 30px rgba(255, 182, 193, 0.4),
+                inset 0 5px 15px rgba(255, 255, 255, 0.8);
+            position: relative;
+        }
+
+        .timer-display {
+            font-size: 3.5em;
+            font-weight: 800;
+            color: #c44569;
+            font-family: 'Nunito', sans-serif;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.3);
+        }
+
+        .timer-mode {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: rgba(255, 195, 230, 0.6);
+            color: #c44569;
+        }
+
+        .kawaii-face {
+            margin-top: 10px;
+            font-size: 2em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 18px 35px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-weight: 700;
+            font-family: 'Nunito', sans-serif;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        .start-btn {
+            background: linear-gradient(45deg, #ff6b9d, #ee5a6f);
+            color: white;
+        }
+
+        .pause-btn {
+            background: linear-gradient(45deg, #ffc048, #ff9478);
+            color: white;
+        }
+
+        .reset-btn {
+            background: linear-gradient(45deg, #a8edea, #fed6e3);
+            color: #c44569;
+        }
+
+        .settings-btn {
+            background: linear-gradient(45deg, #d299c2, #fef9d7);
+            color: #c44569;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .session-info {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 195, 230, 0.3);
+            border-radius: 20px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.9em;
+            color: #c44569;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.4em;
+            color: #c44569;
+            font-weight: 800;
+        }
+
+        .work-mode {
+            background: linear-gradient(45deg, #ff6b9d, #ffc3e6);
+            color: white;
+        }
+
+        .break-mode {
+            background: linear-gradient(45deg, #a8edea, #fed6e3);
+            color: #4ecdc4;
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 3px solid rgba(255, 195, 230, 0.8);
+            z-index: 1000;
+            display: none;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .settings-panel h3 {
+            color: #c44569;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        .setting-group {
+            margin-bottom: 25px;
+        }
+
+        .setting-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #c44569;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .setting-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ffc3e6;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-family: 'Nunito', sans-serif;
+            background: rgba(255, 255, 255, 0.8);
+            color: #c44569;
+        }
+
+        .setting-group input:focus {
+            outline: none;
+            border-color: #ff6b9d;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.2);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .petal {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(circle, #ff69b4, #ffb6c1);
+            border-radius: 50% 10px;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .petal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #ffb6c1, #ffc0cb);
+            border-radius: 10px 50%;
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .timer-circle {
+                width: 240px;
+                height: 240px;
+            }
+
+            .timer-display {
+                font-size: 2.8em;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            button {
+                width: 200px;
+                padding: 15px 25px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="container">
+        <div class="kawaii-decoration">🌸</div>
+        
+        <h1>🌸 可愛いポモドーロタイマー 🌸</h1>
+        
+        <div class="timer-circle">
+            <div class="timer-mode" id="timerMode">作業時間</div>
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <div class="kawaii-face" id="kawaiiFace">😊</div>
+        </div>
+        
+        <div class="controls">
+            <button class="start-btn" id="startBtn">✨ 開始</button>
+            <button class="pause-btn" id="pauseBtn" disabled>⏸️ 一時停止</button>
+            <button class="reset-btn" id="resetBtn">🔄 リセット</button>
+            <button class="settings-btn" id="settingsBtn">⚙️ 設定</button>
+        </div>
+        
+        <div class="session-info">
+            <div class="info-item">
+                <div class="info-label">セッション</div>
+                <div class="info-value" id="sessionCount">1</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">今日の作業</div>
+                <div class="info-value" id="todayWork">0分</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-panel" id="settingsPanel">
+        <h3>⚙️ タイマー設定</h3>
+        <div class="setting-group">
+            <label for="workTimeInput">🍅 作業時間（分）</label>
+            <input type="number" id="workTimeInput" value="25" min="1" max="120">
+        </div>
+        <div class="setting-group">
+            <label for="shortBreakInput">☕ 短い休憩（分）</label>
+            <input type="number" id="shortBreakInput" value="5" min="1" max="30">
+        </div>
+        <div class="setting-group">
+            <label for="longBreakInput">🛁 長い休憩（分）</label>
+            <input type="number" id="longBreakInput" value="15" min="5" max="60">
+        </div>
+        <div class="controls">
+            <button class="start-btn" id="saveSettingsBtn">💾 保存</button>
+            <button class="reset-btn" id="cancelSettingsBtn">❌ キャンセル</button>
+        </div>
+    </div>
+
+    <script>
+        class PomodoroTimer {
+            constructor() {
+                this.workTime = 25 * 60;
+                this.shortBreakTime = 5 * 60;
+                this.longBreakTime = 15 * 60;
+                this.currentTime = this.workTime;
+                this.isRunning = false;
+                this.isWorkSession = true;
+                this.sessionCount = 1;
+                this.todayWorkTime = 0;
+                this.timer = null;
+
+                this.timerDisplay = document.getElementById('timerDisplay');
+                this.timerMode = document.getElementById('timerMode');
+                this.sessionCountDisplay = document.getElementById('sessionCount');
+                this.todayWorkDisplay = document.getElementById('todayWork');
+                this.kawaiiFace = document.getElementById('kawaiiFace');
+                
+                this.startBtn = document.getElementById('startBtn');
+                this.pauseBtn = document.getElementById('pauseBtn');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.settingsBtn = document.getElementById('settingsBtn');
+                
+                this.settingsPanel = document.getElementById('settingsPanel');
+                this.overlay = document.getElementById('overlay');
+                this.workTimeInput = document.getElementById('workTimeInput');
+                this.shortBreakInput = document.getElementById('shortBreakInput');
+                this.longBreakInput = document.getElementById('longBreakInput');
+                this.saveSettingsBtn = document.getElementById('saveSettingsBtn');
+                this.cancelSettingsBtn = document.getElementById('cancelSettingsBtn');
+
+                this.loadSettings();
+                this.bindEvents();
+                this.updateDisplay();
+                this.updateModeDisplay();
+            }
+
+            bindEvents() {
+                this.startBtn.addEventListener('click', () => this.start());
+                this.pauseBtn.addEventListener('click', () => this.pause());
+                this.resetBtn.addEventListener('click', () => this.reset());
+                this.settingsBtn.addEventListener('click', () => this.openSettings());
+                this.saveSettingsBtn.addEventListener('click', () => this.saveSettings());
+                this.cancelSettingsBtn.addEventListener('click', () => this.closeSettings());
+                this.overlay.addEventListener('click', () => this.closeSettings());
+            }
+
+            start() {
+                this.isRunning = true;
+                this.startBtn.disabled = true;
+                this.pauseBtn.disabled = false;
+                this.updateKawaiiFace();
+                
+                this.timer = setInterval(() => {
+                    this.currentTime--;
+                    this.updateDisplay();
+                    
+                    if (this.currentTime === 0) {
+                        this.completeSession();
+                    }
+                }, 1000);
+            }
+
+            pause() {
+                this.isRunning = false;
+                this.startBtn.disabled = false;
+                this.pauseBtn.disabled = true;
+                this.updateKawaiiFace();
+                clearInterval(this.timer);
+            }
+
+            reset() {
+                this.pause();
+                this.currentTime = this.isWorkSession ? this.workTime : 
+                    (this.sessionCount % 4 === 0 ? this.longBreakTime : this.shortBreakTime);
+                this.updateDisplay();
+                this.updateKawaiiFace();
+            }
+
+            completeSession() {
+                this.pause();
+                this.createFlowerShower();
+                this.playNotificationSound();
+                
+                if (this.isWorkSession) {
+                    this.todayWorkTime += this.workTime;
+                    this.updateTodayWork();
+                    
+                    setTimeout(() => {
+                        alert('🎉 作業セッション完了！お疲れさまでした！🌸');
+                        this.isWorkSession = false;
+                        this.currentTime = this.sessionCount % 4 === 0 ? this.longBreakTime : this.shortBreakTime;
+                        this.updateDisplay();
+                        this.updateModeDisplay();
+                        this.updateKawaiiFace();
+                    }, 2000);
+                } else {
+                    setTimeout(() => {
+                        alert('😊 休憩時間終了！新しい作業セッションを始めましょう！✨');
+                        this.isWorkSession = true;
+                        this.sessionCount++;
+                        this.currentTime = this.workTime;
+                        this.updateDisplay();
+                        this.updateModeDisplay();
+                        this.updateKawaiiFace();
+                    }, 2000);
+                }
+            }
+
+            updateDisplay() {
+                const minutes = Math.floor(this.currentTime / 60);
+                const seconds = this.currentTime % 60;
+                this.timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                this.sessionCountDisplay.textContent = this.sessionCount;
+            }
+
+            updateModeDisplay() {
+                if (this.isWorkSession) {
+                    this.timerMode.textContent = '🍅 作業時間';
+                    this.timerMode.className = 'timer-mode work-mode';
+                } else {
+                    const isLongBreak = (this.sessionCount - 1) % 4 === 0 && this.sessionCount > 1;
+                    this.timerMode.textContent = isLongBreak ? '🛁 長い休憩' : '☕ 短い休憩';
+                    this.timerMode.className = 'timer-mode break-mode';
+                }
+            }
+
+            updateKawaiiFace() {
+                if (this.isRunning) {
+                    if (this.isWorkSession) {
+                        this.kawaiiFace.textContent = this.currentTime < 300 ? '😤' : '😊';
+                    } else {
+                        this.kawaiiFace.textContent = '😌';
+                    }
+                } else {
+                    this.kawaiiFace.textContent = '😊';
+                }
+            }
+
+            updateTodayWork() {
+                const totalMinutes = Math.floor(this.todayWorkTime / 60);
+                this.todayWorkDisplay.textContent = `${totalMinutes}分`;
+            }
+
+            openSettings() {
+                this.workTimeInput.value = Math.floor(this.workTime / 60);
+                this.shortBreakInput.value = Math.floor(this.shortBreakTime / 60);
+                this.longBreakInput.value = Math.floor(this.longBreakTime / 60);
+                
+                this.settingsPanel.style.display = 'block';
+                this.overlay.style.display = 'block';
+            }
+
+            closeSettings() {
+                this.settingsPanel.style.display = 'none';
+                this.overlay.style.display = 'none';
+            }
+
+            saveSettings() {
+                this.workTime = parseInt(this.workTimeInput.value) * 60;
+                this.shortBreakTime = parseInt(this.shortBreakInput.value) * 60;
+                this.longBreakTime = parseInt(this.longBreakInput.value) * 60;
+                
+                localStorage.setItem('pomodoroSettings', JSON.stringify({
+                    workTime: this.workTime,
+                    shortBreakTime: this.shortBreakTime,
+                    longBreakTime: this.longBreakTime
+                }));
+                
+                if (!this.isRunning) {
+                    this.currentTime = this.isWorkSession ? this.workTime : this.shortBreakTime;
+                    this.updateDisplay();
+                }
+                
+                this.closeSettings();
+            }
+
+            loadSettings() {
+                const savedSettings = localStorage.getItem('pomodoroSettings');
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    this.workTime = settings.workTime;
+                    this.shortBreakTime = settings.shortBreakTime;
+                    this.longBreakTime = settings.longBreakTime;
+                    this.currentTime = this.workTime;
+                }
+            }
+
+            createFlowerShower() {
+                const colors = ['#ff69b4', '#ffb6c1', '#ffc0cb', '#dda0dd', '#f0e68c', '#98fb98'];
+                const emojis = ['🌸', '🌺', '🌼', '🌻', '💮', '🏵️'];
+                
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const isEmoji = Math.random() < 0.3;
+                        
+                        if (isEmoji) {
+                            this.createEmojiPetal(emojis[Math.floor(Math.random() * emojis.length)]);
+                        } else {
+                            this.createColorPetal(colors[Math.floor(Math.random() * colors.length)]);
+                        }
+                    }, i * 100);
+                }
+            }
+
+            createEmojiPetal(emoji) {
+                const petal = document.createElement('div');
+                petal.textContent = emoji;
+                petal.style.position = 'fixed';
+                petal.style.left = Math.random() * window.innerWidth + 'px';
+                petal.style.top = '-50px';
+                petal.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                petal.style.zIndex = '9999';
+                petal.style.pointerEvents = 'none';
+                petal.style.animation = `fall ${3 + Math.random() * 3}s linear forwards`;
+                
+                document.body.appendChild(petal);
+                
+                setTimeout(() => {
+                    if (petal.parentNode) {
+                        petal.parentNode.removeChild(petal);
+                    }
+                }, 6000);
+            }
+
+            createColorPetal(color) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = Math.random() * window.innerWidth + 'px';
+                petal.style.background = `radial-gradient(circle, ${color}, ${color}99)`;
+                petal.style.animationDuration = (3 + Math.random() * 3) + 's';
+                petal.style.animationDelay = Math.random() * 0.5 + 's';
+                
+                document.body.appendChild(petal);
+                
+                setTimeout(() => {
+                    if (petal.parentNode) {
+                        petal.parentNode.removeChild(petal);
+                    }
+                }, 6000);
+            }
+
+            playNotificationSound() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((frequency, index) => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                        
+                        oscillator.start(audioContext.currentTime + index * 0.15);
+                        oscillator.stop(audioContext.currentTime + index * 0.15 + 0.3);
+                    });
+                } catch (e) {
+                    console.log('Audio not supported');
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new PomodoroTimer();
+        });
+    </script>
+</body>
+</html>
